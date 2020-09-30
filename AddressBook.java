@@ -3,9 +3,6 @@ import java.util.*;
 public class AddressBook implements ManageAddressBook{
 	static Scanner sc=new Scanner(System.in);
 	static Map<String,AddressBook> nameToAddressBookMap=new HashMap<String,AddressBook>();
-	public void closeScanner() {
-		sc.close();
-	}
 	public String name;
 	public ArrayList<Contact> contacts;
 	public Map<String,Contact> nameToContactMap;
@@ -115,9 +112,6 @@ public class AddressBook implements ManageAddressBook{
 				}
 			}			
 			
-		}
-		for(String i:nameToAddressBookMap.keySet()) {
-			nameToAddressBookMap.get(i).closeScanner();
 		}
 		sc.close();
 		
