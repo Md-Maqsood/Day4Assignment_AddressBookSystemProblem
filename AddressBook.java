@@ -1,7 +1,28 @@
+import java.util.*;
 public class AddressBook{
+	static Scanner sc=new Scanner(System.in); 
+	public Contact[] contacts;
+	public int numOfContacts;
+	public AddressBook() {
+		super();
+		contacts = new Contact[5];
+		numOfContacts=0;
+	}
+	public void addContact(String firstName,String lastName,String address,String city,String state, int zip,long phoneNumber,String email) {
+		contacts[numOfContacts]=new Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
+		numOfContacts++;
+	}
+	
 	public static void main(String[] args) {
-		Contact contact=new Contact("Paul", "Allen", "52, Baker's Street", "New York", "California", 832110, 1234567890,"paul@cap.com");
-		System.out.println("New Contact has been create in address book.\n"+contact);
+		AddressBook addressBook=new AddressBook();
+		System.out.println("Enter the fields in order: \nfirst_name\nlast_name\naddress\ncity\nstate\nzip\nphone no.\nemail");
+		addressBook.addContact(sc.nextLine(),sc.nextLine(),sc.nextLine(),sc.nextLine(),sc.nextLine(),Integer.parseInt(sc.nextLine()),Long.parseLong(sc.nextLine()),sc.nextLine());
+		for(Contact contact:addressBook.contacts) {
+			if(contact==null) {
+				continue;
+			}
+			System.out.println(contact);
+		}
 	}	
 }
 
@@ -76,7 +97,7 @@ class Contact{
 	}
 	@Override
 	public String toString() {
-		return "Contact: "+firstName + lastName+ ", "+address+", "+city+", " +state+ ", "+", " +zip+ ", "+ phoneNumber + "\n"+email+".";
+		return "Contact: "+firstName + " "+ lastName+ ", "+address+", "+city+", " +state+ ", "+", " +zip+ ", "+ phoneNumber + "\n"+email+".";
 	}
 	
 }
