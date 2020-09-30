@@ -14,7 +14,8 @@ public class AddressBook implements ManageAddressBook{
 		this.nameToContactMap=new HashMap<String,Contact>();
 	}
 	
-	public void addContact(Contact contact) {
+	public void addContact(String firstName,String lastName,String address,String city,String state, int zip,long phoneNumber,String email) {
+		Contact contact=new Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
 		contacts.add(contact);
 		nameToContactMap.put(contact.getFirstName()+" "+contact.getLastName(), contact);
 	}
@@ -69,7 +70,7 @@ public class AddressBook implements ManageAddressBook{
 						int choice1=Integer.parseInt(sc.nextLine());
 						if(choice1==1) {
 							System.out.println("Enter the fields in order: \nfirst_name\nlastname\naddress\ncity\nstate\nzip\nphone no.\nemail");
-							addressBook.addContact(new Contact(sc.nextLine(),sc.nextLine(),sc.nextLine(),sc.nextLine(),sc.nextLine(),Integer.parseInt(sc.nextLine()),Long.parseLong(sc.nextLine()),sc.nextLine()));
+							addressBook.addContact(sc.nextLine(),sc.nextLine(),sc.nextLine(),sc.nextLine(),sc.nextLine(),Integer.parseInt(sc.nextLine()),Long.parseLong(sc.nextLine()),sc.nextLine());
 						}
 						else if(choice1==2) {
 							break;
@@ -87,7 +88,7 @@ public class AddressBook implements ManageAddressBook{
 					}
 					System.out.println("Enter name of person whose contact details are to be edited: ");
 					String editName=sc.nextLine();
-					System.out.println("Enter the new fields in order: address\ncity\nstate\nzip\nphone no.\nemail");
+					System.out.println("Enter the new fields in order: \naddress\ncity\nstate\nzip\nphone no.\nemail");
 					addressBook.editContact(editName,sc.nextLine(),sc.nextLine(),sc.nextLine(),Integer.parseInt(sc.nextLine()),Long.parseLong(sc.nextLine()),sc.nextLine());		
 					System.out.println("After Edit");
 					for(Contact contact: addressBook.contacts) {
@@ -120,7 +121,7 @@ public class AddressBook implements ManageAddressBook{
 	
 }
 interface ManageAddressBook{
-	public void addContact(Contact contact);
+	public void addContact(String firstName,String lastName,String address,String city,String state, int zip,long phoneNumber,String email);
 	public void editContact(String name,String address,String city,String state, int zip,long phoneNumber,String email);
 	public void deleteContact(String name);
 }
