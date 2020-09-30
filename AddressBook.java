@@ -1,73 +1,88 @@
 import java.util.*;
-public class AddressBook{
-	static Scanner sc=new Scanner(System.in); 
-	public Contact[] contacts;
-	public int numOfContacts;
+
+public class AddressBook implements ManageAddressBook{
+	static Scanner sc=new Scanner(System.in);
+	public ArrayList<Contact> contacts;
+	public Map<String,Contact> nameToContactMap;
+	
 	public AddressBook() {
 		super();
-		contacts = new Contact[5];
-		numOfContacts=0;
-	}
-	public void addContact(String firstName,String lastName,String address,String city,String state, int zip,long phoneNumber,String email) {
-		contacts[numOfContacts]=new Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
-		numOfContacts++;
-	}
-	public void editContact(String name,String address,String city,String state, int zip,long phoneNumber,String email) {
-		for(int i=0;i<numOfContacts;i++) {
-			if(contacts[i]==null) {
-				continue;
-			}
-			if(name.equals(contacts[i].getFirstName()+" "+contacts[i].getLastName())) {
-				contacts[i].setAddress(address);
-				contacts[i].setCity(city);
-				contacts[i].setState(state);
-				contacts[i].setZip(zip);
-				contacts[i].setPhoneNumber(phoneNumber);
-				contacts[i].setEmail(email);
-			}
-		}
-	}
-	public void deleteContact(String name) {
-		for(int i=0;i<numOfContacts;i++) {
-			if(contacts[i]==null) {
-				continue;
-			}
-			if(name.equals(contacts[i].getFirstName()+" "+contacts[i].getLastName())) {
-				contacts[i]=null;
-				numOfContacts--;
-			}
-		}
+		this.contacts = new ArrayList<Contact>();
+		this.nameToContactMap=new HashMap<String,Contact>();
 	}
 	
-	public static void main(String[] args) {
+	
+	public void addContact(Contact contact) {
+		contacts.add(contact);
+		nameToContactMap.put(contact.getFirstName()+" "+contact.getLastName(), contact);
+	}
+	
+	public void editContact(String name,String address,String city,String state, int zip,long phoneNumber,String email) {
+		nameToContactMap.get(name).setAddress(address);
+		nameToContactMap.get(name).setCity(city);
+		nameToContactMap.get(name).setState(state);
+		nameToContactMap.get(name).setZip(zip);
+		nameToContactMap.get(name).setPhoneNumber(phoneNumber);
+		nameToContactMap.get(name).setEmail(email);
+	}
+	
+	public void deleteContact(String name) {
+		contacts.remove(nameToContactMap.get(name));
+		nameToContactMap.remove(name);
+	}
+	
+
+	@Override
+	public String toString() {
+		return "Address Book with "+contacts.size()+(contacts.size()==1?" contact":" contacts");
+	}
+
+	public static void main(String[] args){		
 		AddressBook addressBook=new AddressBook();
-		System.out.println("Enter the fields in order: \nfirst_name\nlast_name\naddress\ncity\nstate\nzip\nphone no.\nemail");
-		addressBook.addContact(sc.nextLine(),sc.nextLine(),sc.nextLine(),sc.nextLine(),sc.nextLine(),Integer.parseInt(sc.nextLine()),Long.parseLong(sc.nextLine()),sc.nextLine());
+		while(true) {
+			System.out.println("1.Add next Contact\n2.Exit\nEnter your choice: ");
+			int choice=Integer.parseInt(sc.nextLine());
+			if(choice==1) {
+				System.out.println("Enter the fields in order: \nfirst_name\nlastname\naddress\ncity\nstate\nzip\nphone no.\nemail");
+				addressBook.addContact(new Contact(sc.nextLine(),sc.nextLine(),sc.nextLine(),sc.nextLine(),sc.nextLine(),Integer.parseInt(sc.nextLine()),Long.parseLong(sc.nextLine()),sc.nextLine()));
+			}
+			else if(choice==2) {
+				break;
+			}
+			else {
+				System.out.println("Invalid Choice. Try Again.");
+			}
+		}
 		System.out.println("Before edit:");
 		for(Contact contact: addressBook.contacts) {
-			if(contact==null) {
-				continue;
-			}
 			System.out.println(contact);
 		}
 		System.out.println("Enter name of person whose contact details are to be edited: ");
-		String name=sc.nextLine();
-		System.out.println("Enter the new fields in order: address\ncity\nstate\nzip\nphone no.\nemail");
-		addressBook.editContact(name,sc.nextLine(),sc.nextLine(),sc.nextLine(),Integer.parseInt(sc.nextLine()),Long.parseLong(sc.nextLine()),sc.nextLine());		
+		String editName=sc.nextLine();
+		System.out.println("Enter the new fields in order: \naddress\ncity\nstate\nzip\nphone no.\nemail");
+		addressBook.editContact(editName,sc.nextLine(),sc.nextLine(),sc.nextLine(),Integer.parseInt(sc.nextLine()),Long.parseLong(sc.nextLine()),sc.nextLine());		
 		System.out.println("After Edit");
 		for(Contact contact: addressBook.contacts) {
-			if(contact==null) {
-				continue;
-			}
 			System.out.println(contact);
 		}
 		System.out.println("Enter the name of Contact person to be deleted: ");
 		String deleteName=sc.nextLine();
-		System.out.println("Number of contacts in the address book before deletion+"+addressBook.numOfContacts);
 		addressBook.deleteContact(deleteName);
-		System.out.println("Number of contacts in the address book after deletion+"+addressBook.numOfContacts);
+		System.out.println("After Delete");
+		System.out.println(addressBook);
+		for(Contact contact: addressBook.contacts) {
+			System.out.println(contact);
+		}
 		sc.close();
-	}	
+		
+	}
+	
+}
+
+interface ManageAddressBook{
+	public void addContact(Contact contact);
+	public void editContact(String name,String address,String city,String state, int zip,long phoneNumber,String email);
+	public void deleteContact(String name);
 }
 
 class Contact{
@@ -141,7 +156,7 @@ class Contact{
 	}
 	@Override
 	public String toString() {
-		return "Contact: "+firstName + " "+ lastName+ ", "+address+", "+city+", " +state+ ", " +zip+ ", "+ phoneNumber + "\n"+email+".";
+		return "Contact: "+firstName +" "+ lastName+ ", "+address+", "+city+", " +state+ ", "+zip+", "+ phoneNumber + "\n"+email+".";
 	}
 	
 }
