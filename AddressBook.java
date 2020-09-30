@@ -27,6 +27,17 @@ public class AddressBook{
 			}
 		}
 	}
+	public void deleteContact(String name) {
+		for(int i=0;i<numOfContacts;i++) {
+			if(contacts[i]==null) {
+				continue;
+			}
+			if(name.equals(contacts[i].getFirstName()+" "+contacts[i].getLastName())) {
+				contacts[i]=null;
+				numOfContacts--;
+			}
+		}
+	}
 	
 	public static void main(String[] args) {
 		AddressBook addressBook=new AddressBook();
@@ -50,6 +61,11 @@ public class AddressBook{
 			}
 			System.out.println(contact);
 		}
+		System.out.println("Enter the name of Contact person to be deleted: ");
+		String deleteName=sc.nextLine();
+		System.out.println("Number of contacts in the address book before deletion+"+addressBook.numOfContacts);
+		addressBook.deleteContact(deleteName);
+		System.out.println("Number of contacts in the address book after deletion+"+addressBook.numOfContacts);
 		sc.close();
 	}	
 }
