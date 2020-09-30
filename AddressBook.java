@@ -1,10 +1,45 @@
 import java.util.*;
 
-public class AddressBookSystem{
+public class AddressBook implements ManageAddressBook{
 	static Scanner sc=new Scanner(System.in);
-	private static Map<String,AddressBook> nameToAddressBookMap=new HashMap<String,AddressBook>();
-	public static void addAddressBook(String name) {
-		nameToAddressBookMap.put(name, new AddressBook(name));
+	static Map<String,AddressBook> nameToAddressBookMap=new HashMap<String,AddressBook>();
+	public void closeScanner() {
+		sc.close();
+	}
+	public String name;
+	public ArrayList<Contact> contacts;
+	public Map<String,Contact> nameToContactMap;
+	
+	public AddressBook(String name) {
+		super();
+		this.name=name;
+		this.contacts = new ArrayList<Contact>();
+		this.nameToContactMap=new HashMap<String,Contact>();
+	}
+	
+	public void addContact(Contact contact) {
+		contacts.add(contact);
+		nameToContactMap.put(contact.getFirstName()+" "+contact.getLastName(), contact);
+	}
+	
+	public void editContact(String name,String address,String city,String state, int zip,long phoneNumber,String email) {
+		nameToContactMap.get(name).setAddress(address);
+		nameToContactMap.get(name).setCity(city);
+		nameToContactMap.get(name).setState(state);
+		nameToContactMap.get(name).setZip(zip);
+		nameToContactMap.get(name).setPhoneNumber(phoneNumber);
+		nameToContactMap.get(name).setEmail(email);
+	}
+	
+	public void deleteContact(String name) {
+		contacts.remove(nameToContactMap.get(name));
+		nameToContactMap.remove(name);
+	}
+	
+
+	@Override
+	public String toString() {
+		return "Address Book "+name+" with "+contacts.size()+(contacts.size()==1?" contact":" contacts");
 	}
 	public static void main(String[] args){	
 		while(true) {
@@ -12,7 +47,8 @@ public class AddressBookSystem{
 			int choice=Integer.parseInt(sc.nextLine());
 			if(choice==1) {
 				System.out.println("Enter name of the address book");
-				addAddressBook(sc.nextLine());
+				String name=sc.nextLine();
+				nameToAddressBookMap.put(name,new AddressBook(name));
 			}
 			else if(choice==2) {
 				break;
@@ -86,48 +122,7 @@ public class AddressBookSystem{
 		sc.close();
 		
 	}
-	
-}
-class AddressBook implements ManageAddressBook{
-	static Scanner sc=new Scanner(System.in);
-	public void closeScanner() {
-		sc.close();
-	}
-	public String name;
-	public ArrayList<Contact> contacts;
-	public Map<String,Contact> nameToContactMap;
-	
-	public AddressBook(String name) {
-		super();
-		this.name=name;
-		this.contacts = new ArrayList<Contact>();
-		this.nameToContactMap=new HashMap<String,Contact>();
-	}
-	
-	public void addContact(Contact contact) {
-		contacts.add(contact);
-		nameToContactMap.put(contact.getFirstName()+" "+contact.getLastName(), contact);
-	}
-	
-	public void editContact(String name,String address,String city,String state, int zip,long phoneNumber,String email) {
-		nameToContactMap.get(name).setAddress(address);
-		nameToContactMap.get(name).setCity(city);
-		nameToContactMap.get(name).setState(state);
-		nameToContactMap.get(name).setZip(zip);
-		nameToContactMap.get(name).setPhoneNumber(phoneNumber);
-		nameToContactMap.get(name).setEmail(email);
-	}
-	
-	public void deleteContact(String name) {
-		contacts.remove(nameToContactMap.get(name));
-		nameToContactMap.remove(name);
-	}
-	
 
-	@Override
-	public String toString() {
-		return "Address Book "+name+" with "+contacts.size()+(contacts.size()==1?" contact":" contacts");
-	}
 	
 }
 interface ManageAddressBook{
