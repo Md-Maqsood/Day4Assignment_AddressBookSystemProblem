@@ -1,4 +1,7 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 public class AddressBook implements ManageAddressBook{
 	static Scanner sc=new Scanner(System.in);
